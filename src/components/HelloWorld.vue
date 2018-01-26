@@ -8,7 +8,7 @@
   export default {
     data() {
       return {
-        num1: 1
+        num1: 5
       };
     },
     methods: {
