@@ -12,7 +12,5 @@ Vue.use(ElementUI)
 /* eslint-disable no-new */
 
 new Vue({
-  el: '#app',
-  router,
-  render: h => h(App)
-})
+  router
+}).$mount("#app")
