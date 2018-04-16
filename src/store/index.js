@@ -9,5 +9,8 @@ export default {
         }catch(e){
             return null;
         } 
+    },
+    clearUser(){
+        window.sessionStorage.clear("user");
     }
 }

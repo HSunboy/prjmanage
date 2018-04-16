@@ -16,6 +16,8 @@
                             <span>内容管理</span>
                         </template>
                         <el-menu-item-group>
+                            <el-menu-item index="categoryManage">分类管理</el-menu-item>
+                            <el-menu-item index="keywords">关键词管理</el-menu-item>
                             <el-menu-item index="1-1">导航管理</el-menu-item>
                             <el-menu-item index="1-2">板块管理</el-menu-item>
                             <el-menu-item index="1-3">内容管理</el-menu-item>
@@ -41,6 +43,7 @@
                             <span>系统管理</span>
                         </template>
                         <el-menu-item-group>
+                            <el-menu-item index="/userManage">人员控制</el-menu-item>
                             <el-menu-item index="/qx-con">权限控制</el-menu-item>
                             <el-menu-item index="3-1">管理修改</el-menu-item>
                             <el-menu-item index="3-2">网站配置</el-menu-item>

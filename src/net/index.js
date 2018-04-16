@@ -106,6 +106,33 @@ const req = {
     },
     "getAllAdmins":function(params){
         return promiseFunc("/blogService/v1/admin/getalladmins",params,true)
+    },
+    "addAdmin":function(params){
+        return promiseFuncPost("/blogService/v1/admin/addadmin",params,true)
+    },
+    "getroleadmin":function(params){
+        return promiseFunc("/blogService/v1/role/getroleadmin",params,true)
+    },
+    "signadminrole":function(params){
+        return promiseFunc("/blogService/v1/role/signadminrole",params,true)
+    },
+    "deleteAdmin":function(params){
+        return promiseFunc("/blogService/v1/admin/deleteadmin",params,true)
+    },
+    changePassword:function(params){
+        return promiseFunc("/blogService/v1/admin/changepassword",params,true)
+    },
+    resetPassword:function(params){
+        return promiseFunc("/blogService/v1/admin/resetpassword",params,true)
+    },
+    logout:function(params){
+        return promiseFunc("/blogService/v1/sys/logout",params,true)
+    },
+    addCategory:function(params){
+        return promiseFuncPost("/blogService/v1/category/addcategory",params,true)
+    },
+    getAllCatagory:function(params){
+        return promiseFunc("/blogService/v1/category/getcategory",params,true)
     }
 }
 export default req;
