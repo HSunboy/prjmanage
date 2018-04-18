@@ -133,6 +133,19 @@ const req = {
     },
     getAllCatagory:function(params){
         return promiseFunc("/blogService/v1/category/getcategory",params,true)
+    },
+    querykeywords:function(params){
+        return promiseFunc("/blogService/v1/keywords/querykeywords",params,true)
+    },
+    deleteCatagory(params){
+        return promiseFunc("/blogService/v1/category/deletecategory",params,true)
+    },
+    deletekeyWords(params){
+        return promiseFunc("/blogService/v1/keywords/deletekeyWords",params,true)
+    },
+    addkeywords(params){
+        return promiseFuncPost("/blogService/v1/keywords/addkeywords",params,true)
     }
 }
 export default req;
+export const headIcon=config.baseUrl+"/images/default.jpeg";

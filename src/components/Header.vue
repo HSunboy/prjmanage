@@ -2,7 +2,7 @@
   <div>
     <span class="site-title">Block</span>
     <div class="header-items">
-      <img src="~../assets/admin-icon.png" class="admin-icon" />
+      <img :src="icon" class="admin-icon" @error="iconError" />
       <span class="admin">admin</span>
       <span style="padding:0 10px;color:#FF7200;margin-right:30px;">管理员</span>
       <div class="header-item">
@@ -36,6 +36,8 @@
 <script>
 import net from "@/net"
 import store from "@/store"
+import defaultImg from "@/assets/admin-icon.png"
+import {headIcon} from "@/net"
 export default {
   data() {
     return {
@@ -45,6 +47,7 @@ export default {
         newPassword: "",
         oldPassword: ""
       },
+      icon:headIcon,
       formLabelWidth: "120px"
     };
   },
@@ -58,6 +61,9 @@ export default {
       store.clearUser();
       this.$router.replace("/login");
 
+    },
+    iconError(){
+      this.icon=defaultImg;
     },
     changePasswordShow() {
       this.form = {
