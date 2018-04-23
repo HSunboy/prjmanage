@@ -5,12 +5,19 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
+import "@/assets/css/app.css";
+import back from "@/components/back"
+import catagory from "@/components/catagory"
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */
-
+Vue.component(
+  "x-back",back
+)
+Vue.component(
+  "catagory-select",catagory
+)
 new Vue({
   router
 }).$mount("#app")

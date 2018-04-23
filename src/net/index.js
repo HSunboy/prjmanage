@@ -2,9 +2,10 @@ import axios from "axios";
 import config, { getErrorObj } from "./config"
 import store from "@/store";
 import Vue from "vue";
+let nowCode="";
 const axiosInstance = axios.create({
     baseURL: config.baseUrl,
-    timeout: 10000,
+    timeout: 20000,
     withCredentials: true
 });
 function promiseFunc(path, params, needLogin) {
@@ -39,7 +40,7 @@ function promiseFunc(path, params, needLogin) {
             });
     });
 }
-function promiseFuncPost(path, params, needLogin) {
+function promiseFuncPost(path, params, needLogin,isUpload) {
     let headers={};
     if (needLogin) {
         if(!store.getUser()){
@@ -48,6 +49,9 @@ function promiseFuncPost(path, params, needLogin) {
         }
         headers = {
             token: store.getUser().token
+        }
+        if(isUpload){
+            headers["content-type"]='multipart/form-data';
         }
     }
     return new Promise(function (resolve, reject) {
@@ -79,11 +83,13 @@ const req = {
 
     },
     "login": function (params) {
+        params.params.a=nowCode;
         return promiseFunc("/blogService/v1/sys/login", params);
 
     },
     "getAuth": function () {
         let random = Math.random();
+        nowCode=random;
         return config.baseUrl + "/blogService/v1/sys/getcaptcha?a=" + random;
     },
     "newRole": function (params) {
@@ -145,7 +151,19 @@ const req = {
     },
     addkeywords(params){
         return promiseFuncPost("/blogService/v1/keywords/addkeywords",params,true)
-    }
+    },
+    articleUpload(params){
+        return promiseFuncPost("/blogService/v1/image/uploadsingleimage",params,true,true)
+    },
+    addarticle(params){
+        return promiseFuncPost("/blogService/v1/article/addarticle",params,true)
+    },
+    deletearticle(params){
+        return promiseFunc("/blogService/v1/article/deletearticle",params,true)
+    },
+    getarticle(params){
+        return promiseFunc("/blogService/v1/article/getarticle",params,true)
+    },
 }
 export default req;
 export const headIcon=config.baseUrl+"/images/default.jpeg";

@@ -1,7 +1,7 @@
 <template>
   <div >
    
-      <div class="x-header">
+      <div class="x-header" style="z-index:2000">
         <Header></Header>
       </div>
      

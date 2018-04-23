@@ -8,7 +8,9 @@ const qx_con = r => require.ensure([], () => r(require("@/views/qx_con")), "qx_c
 const userManage = r => require.ensure([], () => r(require("@/views/userManage")), "userManage");
 const categoryManage = r => require.ensure([], () => r(require("@/views/categoryManage")), "categoryManage");
 const keywords = r => require.ensure([], () => r(require("@/views/keywords")), "keywords");
-
+const articleManage= r => require.ensure([], () => r(require("@/views/articleManage")), "articleManage");
+const articleList= r => require.ensure([], () => r(require("@/views/articleManage/articleList")), "articleList");
+const newArticle= r => require.ensure([], () => r(require("@/views/articleManage/newArticle")), "newArticle");
 Vue.use(Router)
 
 export default new Router({
@@ -32,6 +34,21 @@ export default new Router({
         {
           path:"keywords",
           component:keywords
+        },
+        {
+          path:"articleManage",
+          component:articleManage,
+          children:[
+            {
+              path:"",
+              component:articleList
+            },
+            {
+              path:"newArticle",
+              component:newArticle
+            },
+            
+          ]
         }
       ]
     },

@@ -1,6 +1,7 @@
 <template>
     <div>
         <el-card class="box-card">
+          
             <div slot="header" class="clearfix">
                 <span>关键词管理</span>
                 <el-button @click="newKeyWords" style="float: right; padding: 3px 0" type="text">添加关键词</el-button>

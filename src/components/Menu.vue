@@ -18,6 +18,7 @@
                         <el-menu-item-group>
                             <el-menu-item index="categoryManage">分类管理</el-menu-item>
                             <el-menu-item index="keywords">关键词管理</el-menu-item>
+                            <el-menu-item index="articleManage">文章管理</el-menu-item>
                             <el-menu-item index="1-1">导航管理</el-menu-item>
                             <el-menu-item index="1-2">板块管理</el-menu-item>
                             <el-menu-item index="1-3">内容管理</el-menu-item>
@@ -78,8 +79,9 @@
           
           if(pathName){
               let pathArr=/^(\/[^\/]+)([\/]?.*)$/.exec(pathName);
+              
               if(pathArr&&pathArr.length>1){
-                this.nowView=pathArr[1]
+                this.nowView=pathArr[1].substring(1)
               }
 
           }
@@ -92,7 +94,7 @@
           console.log(key, keyPath);
         },
         selectMenu(index,indexPath){
-            this.$router.push(index)
+            this.$router.push("/"+index)
         }
       }
     };
