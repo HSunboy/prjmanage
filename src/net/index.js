@@ -162,8 +162,9 @@ const req = {
         return promiseFunc("/blogService/v1/article/deletearticle",params,true)
     },
     getarticle(params){
-        return promiseFunc("/blogService/v1/article/getarticle",params,true)
+        return promiseFuncPost("/blogService/v1/article/getarticle",params,true)
     },
+
 }
 export default req;
 export const headIcon=config.baseUrl+"/images/default.jpeg";

@@ -27,10 +27,10 @@ export default {
       this.tableLoading = true;
       net
         .getarticle({
-          params: {
+         
             pageNo: 1,
             pageSize: 9999
-          }
+          
         })
         .then(data => {
           this.tableLoading = false;
