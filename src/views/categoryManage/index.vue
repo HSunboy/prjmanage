@@ -134,8 +134,9 @@
             }];
           })
           .catch(e => {
-            this.$message.error(e.errorMsg);
             loading.close();
+            this.$message.error(e.errorMsg);
+            
           });
       },
       newCategory() {

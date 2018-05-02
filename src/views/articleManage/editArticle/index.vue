@@ -3,14 +3,15 @@
     <x-back></x-back>
     <el-card>
       <div slot="header">
-        <span>新建文章</span>
-
+        <span>文章详情</span>
+        <el-button style="float: right; padding: 3px 0" v-if="!edit" @click="editArticle" type="text">编辑</el-button>
+        <!-- <el-button style="float: right; padding: 3px 0" v-if="edit" @click="editArticle" type="text">取消</el-button> -->
       </div>
-      <el-input v-model="article.title" placeholder="请输入文章标题"></el-input>
+      <el-input :disabled="!edit" v-model="article.title" placeholder="请输入文章标题"></el-input>
       <el-row style="margin-top:30px" type="flex" align="middle">
         <el-col :span="2">分类：</el-col>
         <el-col :span="20">
-          <catagory-select @change="catagoryChange" :treeData="treeData"></catagory-select>
+          <catagory-select :disabled="!edit" @change="catagoryChange" :initValue="catagory" :treeData="treeData"></catagory-select>
         </el-col>
       </el-row>
 
@@ -18,7 +19,7 @@
         <el-row type="flex" align="middle">
           <el-col :span="2">关键字：</el-col>
           <el-col :span="20">
-            <el-select filterable style="width:100%" v-model="keywords" multiple placeholder="请选择">
+            <el-select filterable style="width:100%" :disabled="!edit" v-model="keywords" multiple placeholder="请选择">
 
               <el-option-group v-for="group in keywordsData" :key="group.categoryId" :label="group.categoryStr">
                 <el-option v-for="item in group.keywords" :key="item.id" :label="item.name" :value="item.id">
@@ -33,13 +34,13 @@
       <el-row style="margin-top:30px" type="flex" align="middle">
         <el-col :span="2">简介：</el-col>
         <el-col :span="20">
-          <el-input type="textarea" :rows="2" placeholder="请输入简介" v-model="overviewText"></el-input>
+          <el-input :disabled="!edit" type="textarea" :rows="2" placeholder="请输入简介" v-model="overviewText"></el-input>
         </el-col>
       </el-row>
       <el-row style="margin-top:30px" type="flex" align="middle">
         <el-col :span="2">缩略图：</el-col>
         <el-col :span="20">
-          <el-upload class="avatar-uploader" name="image" action="https://127.0.0.1" :http-request="uploadPic" :show-file-list="false" :on-success="handleAvatarSuccess">
+          <el-upload :disabled="!edit" class="avatar-uploader" name="image" action="https://127.0.0.1" :http-request="uploadPic" :show-file-list="false" :on-success="handleAvatarSuccess">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -47,41 +48,77 @@
       </el-row>
 
       <div style="margin-top:30px">
-        <div ref="toolbar-container"></div>
+        <div ref="toolbar-container" v-html="article.articleContent" :disabled="true">
+         
+        </div>
       </div>
-      <el-button style="margin-top:15px" type="primary" @click="putData">发布文章</el-button>
+      <el-button style="margin-top:15px;margin-right:15px;" v-if="edit" type="primary" @click="putData">保存文章</el-button>
     </el-card>
   </div>
 </template>
 <script>
 import net from "@/net";
 import config from "@/net/config";
+import Vue from "vue"
 const ClassicEditor = require("@ckeditor/ckeditor5-build-classic");
 export default {
   data() {
     return {
       article: {
-        title: ""
+        title: "",
+        articleContent: ""
       },
       treeData: [],
-      catagory: [],
+      catagoryId: "",
+      chooseCatagoryId:"",
       keywords: [],
       keywordsData: [],
       overviewText: "",
       imageUrl: "",
-      pic:""
+      pic: "",
+      edit: false
     };
   },
-  
+  computed:{
+    catagory:function(){
+      let arr=[];
+      let keys=[0];
+      let id=this.catagoryId;
+      for(let i in this.treeData){
+        let item=this.treeData[i];
+        const deep=item.deep;
+        if(deep<=keys.length-1){
+          keys.splice(deep)
+        }
+        
+        
+        keys.push(item.id);
+        
+        
+        if(item.id==id){
+          arr=keys
+          break;
+        }
+        
+      }
+
+      return arr;
+    }
+  },
   methods: {
-    uploadPic(f){
-       const data = new FormData();
+    editArticle() {
+      window.editor.isReadOnly=this.edit
+      this.edit = !this.edit;
+      
+    },
+    uploadPic(f) {
+      const data = new FormData();
       data.append("image", f.file);
       net
         .articleUpload(data)
         .then(response => {
           console.log(response);
-          this.pic=config.baseUrl + "/images/"+response.path;
+          this.pic = config.baseUrl + "/images/" + response.path;
           f.onSuccess();
         })
         .catch(error => {
@@ -91,11 +128,11 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      this.$message.success("上传成功！")
-      
+      this.$message.success("上传成功！");
     },
     catagoryChange(value) {
-      this.catagory = value;
+      
+      this.chooseCatagoryId = value[value.length-1];
     },
     putData() {
       const editor = window.editor;
@@ -107,13 +144,14 @@ export default {
         background: "rgba(0, 0, 0, 0.7)"
       });
       net
-        .addarticle({
+        .updateArticleDetail({
           keywords: this.keywords.join(","),
           title: this.article.title,
           content: data,
-          categoryId: this.catagory[this.catagory.length - 1],
+          categoryId: this.chooseCatagoryId,
           description: this.overviewText,
-          pic:this.pic
+          pic: this.pic,
+          id:this.$route.query.id
         })
         .then(data => {
           loading.close();
@@ -122,7 +160,7 @@ export default {
 
             return;
           }
-          this.$message.success("添加成功");
+          this.$message.success("修改成功");
           this.$router.replace("/articleManage");
         })
         .catch(e => {
@@ -143,7 +181,6 @@ export default {
           loading.close();
           if (data.code != "0000") {
             this.$message.error(data.msg);
-
             return;
           }
           this.treeData = data.result;
@@ -198,21 +235,75 @@ export default {
           this.$message.error(e.errorMsg);
           loading.close();
         });
+    },
+    getArticelDetail() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中..",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
+      net
+        .getarticleDetail({
+          params: {
+            articleId: this.$route.query.id
+          }
+        })
+        .then(data => {
+          loading.close();
+          if (data.code != "0000") {
+            this.$message.error(data.msg);
+            return;
+          }
+          const article = data.result;
+          this.article.title = article.title;
+          this.article.articleContent = article.content;
+          this.overviewText = article.description;
+          this.pic = article.pic;
+          this.imageUrl = article.pic;
+          this.keywords=article.keyWordsList&&article.keyWordsList.map(
+            (item)=>{
+              return item.id
+            }
+          )
+          this.catagoryId=article.categoryId;
+          Vue.nextTick(()=>{
+            this.initEditor();
+          })
+          
+        })
+        .catch(e => {
+          console.log(e)
+          this.$message.error(e.errorMsg);
+          loading.close();
+        });
+    },
+    findCatatory(id){
+
+    },
+    initEditor() {
+      ClassicEditor.create(this.$refs["toolbar-container"], {
+       
+      })
+        .then(editor => {
+          window.editor = editor;
+          editor.isReadOnly=true
+          editor.plugins.get("FileRepository").createUploadAdapter = loader => {
+            return new FileUploadAdapter(loader);
+          };
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   },
   mounted() {
     this.getCatagory();
     this.querykeywords();
-    ClassicEditor.create(this.$refs["toolbar-container"], {})
-      .then(editor => {
-        window.editor = editor;
-        editor.plugins.get("FileRepository").createUploadAdapter = loader => {
-          return new FileUploadAdapter(loader);
-        };
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    this.getArticelDetail();
+  },
+  destroyed(){
+    window.editor=null;
   }
 };
 class FileUploadAdapter {
@@ -254,7 +345,7 @@ class FileUploadAdapter {
   position: relative;
   overflow: hidden;
 }
-.avatar-uploader>>> .el-upload:hover {
+.avatar-uploader>>>.el-upload:hover {
   border-color: #409eff;
 }
 .avatar-uploader-icon {

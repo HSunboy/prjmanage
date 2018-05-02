@@ -44,8 +44,8 @@
                             <span>系统管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/userManage">人员控制</el-menu-item>
-                            <el-menu-item index="/qx-con">权限控制</el-menu-item>
+                            <el-menu-item index="userManage">人员控制</el-menu-item>
+                            <el-menu-item index="qx-con">权限控制</el-menu-item>
                             <el-menu-item index="3-1">管理修改</el-menu-item>
                             <el-menu-item index="3-2">网站配置</el-menu-item>
                             <el-menu-item index="3-3">清除缓存</el-menu-item>

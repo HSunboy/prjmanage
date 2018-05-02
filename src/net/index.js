@@ -12,7 +12,7 @@ function promiseFunc(path, params, needLogin) {
     if (needLogin) {
         if(!store.getUser()){
             location.replace("#/login")
-            return;
+            return Promise.reject("未登陆");
         }
         params = params || {};
         params.headers = {
@@ -45,7 +45,8 @@ function promiseFuncPost(path, params, needLogin,isUpload) {
     if (needLogin) {
         if(!store.getUser()){
             location.replace("#/login")
-            return;
+            
+            return Promise.reject("未登陆");
         }
         headers = {
             token: store.getUser().token
@@ -162,7 +163,16 @@ const req = {
         return promiseFunc("/blogService/v1/article/deletearticle",params,true)
     },
     getarticle(params){
-        return promiseFuncPost("/blogService/v1/article/getarticle",params,true)
+        return promiseFuncPost("/blogService/v1/article/getarticlelist",params,true)
+    },
+    updateArticle(params){
+        return promiseFunc("/blogService/v1/article/updatearticlelist",params,true)
+    },
+    getarticleDetail(params){
+        return promiseFunc("/blogService/v1/article/getarticle",params,true)
+    },
+    updateArticleDetail(params){
+        return promiseFuncPost("/blogService/v1/article/updatearticle",params,true)
     },
 
 }

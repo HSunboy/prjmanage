@@ -1,6 +1,6 @@
 <template>
    
-        <el-cascader filterable v-model="categoryParent" :options="options" ></el-cascader>
+        <el-cascader :disabled="disabled" filterable v-model="categoryParent" :options="options" ></el-cascader>
     
 </template>
 
@@ -8,15 +8,18 @@
 export default {
   data() {
     return {
-      categoryParent: [],
+      categoryParent:[],
      
     };
   },
-  props: ["treeData"],
+  props: ["treeData","disabled","initValue"],
   watch:{
       "categoryParent":function(val){
           this.$emit("change",val);
-      }
+      },
+      initValue:function(val){
+          this.categoryParent=val;
+      },
   },
   computed: {
     options: function() {

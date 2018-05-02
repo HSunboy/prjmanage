@@ -53,6 +53,8 @@ import Menu from '@/components/Menu'
     left:0px;
     width:200px;
     background: rgb(84, 92, 100);
+    overflow-y: auto;
+    overflow-x: hidden;
     
    
   }
@@ -62,5 +64,6 @@ import Menu from '@/components/Menu'
   .main-box{
     padding-top:85px;
     padding-left:220px;
+    
   }
 </style>

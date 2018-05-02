@@ -11,6 +11,7 @@ const keywords = r => require.ensure([], () => r(require("@/views/keywords")), "
 const articleManage= r => require.ensure([], () => r(require("@/views/articleManage")), "articleManage");
 const articleList= r => require.ensure([], () => r(require("@/views/articleManage/articleList")), "articleList");
 const newArticle= r => require.ensure([], () => r(require("@/views/articleManage/newArticle")), "newArticle");
+const editArticle= r => require.ensure([], () => r(require("@/views/articleManage/editArticle")), "editArticle");
 Vue.use(Router)
 
 export default new Router({
@@ -46,6 +47,10 @@ export default new Router({
             {
               path:"newArticle",
               component:newArticle
+            },
+            {
+              path:"editArticle",
+              component:editArticle
             },
             
           ]
